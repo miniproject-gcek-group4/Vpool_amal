@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled1/models/user.dart';
 import 'package:untitled1/screens/home/traveller/usersearchresult.dart';
@@ -79,9 +80,7 @@ class _AllJourneysState extends State<AllJourneys> {
                               Expanded(
                                 child: Text(
                                   journeylist[index].startingloc,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  ),
+                                  style: GoogleFonts.poppins(),
                                 ),
                               ),
 
@@ -98,29 +97,26 @@ class _AllJourneysState extends State<AllJourneys> {
                               Expanded(
                                 child: Text(
                                   journeylist[index].endingloc,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  ),
+                                  style: GoogleFonts.poppins(),
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 10),
+                          SizedBox(height: 20),
                           Row(
                             children: [
                               Expanded(
                                 flex: 1,
                                 child: Text(
                                   'Journey Date',
+                                  style: GoogleFonts.poppins(),
                                 ),
                               ),
                               Expanded(
                                 flex: 1,
                                 child: Text(
                                   journeylist[index].date,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  ),
+                                  style: GoogleFonts.poppins(),
                                 ),
                               ),
                             ],
@@ -130,17 +126,14 @@ class _AllJourneysState extends State<AllJourneys> {
                             children: [
                               Expanded(
                                 flex: 1,
-                                child: Text(
-                                  'Remaining Seats',
-                                ),
+                                child: Text('Remaining Seats',
+                                    style: GoogleFonts.poppins()),
                               ),
                               Expanded(
                                 flex: 1,
                                 child: Text(
                                   journeylist[index].remseats,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  ),
+                                  style: GoogleFonts.poppins(),
                                 ),
                               ),
                             ],

@@ -8,7 +8,7 @@ import 'package:untitled1/models/user.dart';
 import 'models/components.dart';
 
 ///colors to top app bar and bottom naviagtion bar
-Color topcolor = Colors.red, bottomColor = Colors.red;
+Color topcolor = Colors.red, bottomColor = Colors.green;
 
 ///main function
 void main() async {
