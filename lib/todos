@@ -1,0 +1,9 @@
+
+username display instead of email id
+rating
+otp generation while starting a journey
+qr scanning while intermediate picking
+
+remove email id from database and take email using journeyid in code
+
+remove journeyuser collection

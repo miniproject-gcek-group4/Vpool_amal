@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "384318126501",
+    "project_id": "datrack-8ee9f",
+    "storage_bucket": "datrack-8ee9f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:384318126501:android:2cdc35290ef4611677104c",
+        "android_client_info": {
+          "package_name": "com.example.datrack"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0l-4knvNtKLuvljcljtQYzkzydkyFNYg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
