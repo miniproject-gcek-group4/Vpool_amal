@@ -35,7 +35,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Wrapper(),
-        routes: {'forgot_password': (context) => ForgotPassWord()},
+        routes: {
+          'forgot_password': (context) => ForgotPassWord(),
+          'qr_scan': (context) => QRViewExample(),
+        },
       ),
     );
   }
