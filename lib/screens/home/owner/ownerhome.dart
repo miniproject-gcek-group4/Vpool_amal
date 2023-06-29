@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:location/location.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +59,11 @@ class _OwnerHomeState extends State<OwnerHome> {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        leading: BackButton(),
+        leading: BackButton(
+          onPressed: () {
+            exit(0);
+          },
+        ),
         actions: [
           PopupMenuButton(itemBuilder: (context) {
             return [
@@ -83,23 +89,27 @@ class _OwnerHomeState extends State<OwnerHome> {
       ),
 
       ///body of driver pages
-      body: Stack(
-        children: [
-          Container(
-              padding: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.height / 50,
-                  right: MediaQuery.of(context).size.height / 50),
-              height: MediaQuery.of(context).size.height,
-              child: pages[pageIndex]),
-          Positioned(
-              top: MediaQuery.of(context).size.height / 1.25,
-              right: 5,
-              left: 5,
-              child: buildMyNavBar(context)),
-          Positioned(
-              top: MediaQuery.of(context).size.height / 1.5,
-              left: MediaQuery.of(context).size.width / 1.1,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Container(
+                padding: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.height / 50,
+                    right: MediaQuery.of(context).size.height / 50),
+                height: MediaQuery.of(context).size.height,
+                child: pages[pageIndex]),
+            Positioned(
+                top: MediaQuery.of(context).size.height / 1.25,
+                right: 5,
+                left: 5,
+                child: buildMyNavBar(context)),
+            Positioned(
+              bottom:
+                  90.0, // Customize the distance from the bottom as per your needs
+              right:
+                  16.0, // Customize the distance from the right as per your needs
               child: FloatingActionButton(
+                backgroundColor: Colors.green,
                 onPressed: () async {
                   ///location service is enabling while cicking the floating action button for enabling location
                   Location location = new Location();
@@ -128,8 +138,10 @@ class _OwnerHomeState extends State<OwnerHome> {
                   location.enableBackgroundMode(enable: true);
                 },
                 child: Icon(Icons.location_on_outlined),
-              ))
-        ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

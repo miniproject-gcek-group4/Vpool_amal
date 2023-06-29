@@ -4,6 +4,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:location/location.dart';
+import 'package:untitled1/models/components.dart';
 import 'package:untitled1/services/auth.dart';
 import '../../../main.dart';
 import '../../../models/user.dart';
@@ -56,6 +57,11 @@ class _TravellerDetailsState extends State<TravellerDetails> {
           // onLongPress: () {
           //   print("hii");
           //   driverlist.removeAt(index);
+          //   setState(() {
+          //     Widget build(BuildContext context){
+          //
+          //     }
+          //   });
           // },
           child: Card(
             elevation: 5,
@@ -274,19 +280,22 @@ class _JourneyTrackerOwnerState extends State<JourneyTrackerOwner> {
     final travellerlist = Provider.of<List<Corider>?>(context) ?? [];
     print(travellerlist.length);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        flexibleSpace: Appbarstylining(),
+        elevation: 0,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               bottomRight: Radius.circular(25),
               bottomLeft: Radius.circular(25)),
         ),
         toolbarHeight: MediaQuery.of(context).size.height / 15,
-        title: const Center(
+        title: Center(
             child: Text(
           'Vpool',
-          style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
+          style: GoogleFonts.poppins(fontSize: 24),
         )),
-        backgroundColor: topcolor,
+        backgroundColor: Colors.white,
         centerTitle: true,
         leading: BackButton(),
         actions: [
@@ -310,194 +319,283 @@ class _JourneyTrackerOwnerState extends State<JourneyTrackerOwner> {
           }),
         ],
       ),
-      body: Column(
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height / 1.5,
-            child: ListView.separated(
-                itemBuilder: (context, index) {
-                  return Card(
-                    elevation: 5,
-                    shadowColor: Colors.black87,
-                    child: Column(
-                      children: [
-                        Text(travellerlist[index].email),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height / 1.5,
+                child: ListView.separated(
+                    itemBuilder: (context, index) {
+                      return Card(
+                        elevation: 5,
+                        shadowColor: Colors.black87,
+                        child: Column(
                           children: [
-                            Expanded(
-                              flex: 1,
-                              child: Text('journey'),
-                            ),
-                            Expanded(
-                                flex: 2,
-                                child: Text(travellerlist[index].startloc)),
-                            Expanded(
-                              flex: 1,
-                              child: Text('------->'),
-                            ),
-                            Expanded(
-                                flex: 2,
-                                child: Text(travellerlist[index].endloc))
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Text('journey date'),
-                            ),
-                            Expanded(
-                                flex: 1,
-                                child: Text(travellerlist[index].date)),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Text('Seats booked'),
-                            ),
-                            Expanded(
-                                flex: 1,
-                                child: Text(travellerlist[index].nofseats)),
-                          ],
-                        ),
-                        Text("isjoined " + travellerlist[index].isjoined),
-                        Text("isleaved " + travellerlist[index].isleaved),
-                      ],
-                    ),
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Container(
-                    height: 5,
-                  );
-                },
-                itemCount: travellerlist.length),
-          ),
-
-          ///initaily hiding the following fields
-          Visibility(
-            visible: vis,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                    onPressed: () async {
-                      for (int k = 0; k < travellerlist.length; k++) {
-                        a = travellerlist[k].slat;
-                        b = travellerlist[k].slong;
-                        x1 = double.parse(a);
-                        y1 = double.parse(b);
-                        lat.add(x1);
-                        lng.add(y1);
-                        lat = [
-                          ...{...lat}
-                        ];
-                        lng = [
-                          ...{...lng}
-                        ];
-                        email.add(travellerlist[k].email);
-                        email = [
-                          ...{...email}
-                        ];
-                        journy.add(travellerlist[k].journeyid);
-                        journy = [
-                          ...{...journy}
-                        ];
-                      }
-                      trackloc(lat, lng);
-                      for (int j = 0; j < travellerlist.length; j++) {
-                        await AllJourneyTravellerDatabaseService(
-                                useremail: travellerlist[j].email)
-                            .updateDriverJSStartData(
-                                travellerlist[j].journeyid);
-                      }
-                      enableBackgroundMode();
-                    },
-                    child: Text('start')),
-                ElevatedButton(
-                    onPressed: () async {
-                      String barcodeScanRes;
-                      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-                          "#ff6666", "Cancel", true, ScanMode.QR);
-                      print(barcodeScanRes);
-                      int otp = generateotp(
-                          widget.corider.email, widget.corider.journeyid);
-                      AdminJourneyDatabaseService(
-                              useremail: widget.user.username,
-                              journeyid: widget.corider.journeyid)
-                          .updateDriverJourneyDataInUser(
-                              "true", barcodeScanRes, otp.toString());
-                      AdminJourneyDatabaseService(
-                              useremail: widget.user.username,
-                              journeyid: widget.corider.journeyid)
-                          .updateDriverJourneyDistanceDataOtp(otp.toString());
-                      setState(() {});
-                    },
-                    child: Text('Pick corider')),
-                ElevatedButton(
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (Context) {
-                            return AlertDialog(
-                              title: Text("Enter OTP"),
-                              content: TextField(
-                                controller: enteredotp,
+                            Text(travellerlist[index].email),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Expanded(
+                                      child: Text(
+                                    "FROM",
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                                  Expanded(
+                                      child: Text(
+                                    "TO",
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                                ],
                               ),
-                              actions: [
-                                TextButton(
-                                    onPressed: () async {
-                                      int target = -1;
-                                      for (int i = 0;
-                                          i < travellerlist.length;
-                                          i++) {
-                                        if (enteredotp.text ==
-                                            travellerlist[i].otp) {
-                                          target = i;
-                                        }
-                                      }
-                                      await AdminJourneyDatabaseService(
-                                              useremail: widget.user.username,
-                                              journeyid:
-                                                  widget.corider.journeyid)
-                                          .updateDriverJourneyDataInUsers(
-                                              travellerlist[target].email);
-                                    },
-                                    child: Text('submit'))
-                              ],
-                            );
-                          });
-                      if (enteredotp.text ==
-                          widget.corider.journeyid.substring(9, 15)) {
-                        print("success");
-                      }
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Expanded(
+                                      child:
+                                          Text(travellerlist[index].startloc)),
+                                  Expanded(
+                                      child: Text(travellerlist[index].endloc))
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Text('Journey date'),
+                                  ),
+                                  Expanded(
+                                      flex: 1,
+                                      child: Text(travellerlist[index].date)),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Text('Seats booked'),
+                                  ),
+                                  Expanded(
+                                      flex: 1,
+                                      child:
+                                          Text(travellerlist[index].nofseats)),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                  "isjoined " + travellerlist[index].isjoined),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                  "isleaved " + travellerlist[index].isleaved),
+                            ),
+                          ],
+                        ),
+                      );
                     },
-                    child: Text('leaave corider')),
-                ElevatedButton(
-                  onPressed: () async {
-                    for (int i = 0; i < travellerlist.length; i++) {
-                      if (travellerlist[i].isleaved ==
-                              travellerlist[i].isjoined &&
-                          travellerlist[i].isleaved == 'true') {
-                        await AllJourneyTravellerDatabaseService(
-                                useremail: travellerlist[i].email)
-                            .updateDriverJEStartData(
-                                travellerlist[i].journeyid);
-                      }
-                    }
-                    setState(() {
-                      vis = false;
-                    });
-                  },
-                  child: Text('end'),
+                    separatorBuilder: (context, index) {
+                      return Container(
+                        height: 5,
+                      );
+                    },
+                    itemCount: travellerlist.length),
+              ),
+
+              ///initaily hiding the following fields
+              Visibility(
+                visible: vis,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green[400],
+                          foregroundColor: Colors.white,
+                          shadowColor: Colors.grey,
+                          elevation: 8,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(32.0)),
+                          minimumSize: Size(200, 50), //////// HERE
+                        ),
+                        onPressed: () async {
+                          for (int k = 0; k < travellerlist.length; k++) {
+                            a = travellerlist[k].slat;
+                            b = travellerlist[k].slong;
+                            x1 = double.parse(a);
+                            y1 = double.parse(b);
+                            lat.add(x1);
+                            lng.add(y1);
+                            lat = [
+                              ...{...lat}
+                            ];
+                            lng = [
+                              ...{...lng}
+                            ];
+                            email.add(travellerlist[k].email);
+                            email = [
+                              ...{...email}
+                            ];
+                            journy.add(travellerlist[k].journeyid);
+                            journy = [
+                              ...{...journy}
+                            ];
+                          }
+                          trackloc(lat, lng);
+                          for (int j = 0; j < travellerlist.length; j++) {
+                            await AllJourneyTravellerDatabaseService(
+                                    useremail: travellerlist[j].email)
+                                .updateDriverJSStartData(
+                                    travellerlist[j].journeyid);
+                          }
+                          enableBackgroundMode();
+                        },
+                        child: Text('Start')),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green[400],
+                          foregroundColor: Colors.white,
+                          shadowColor: Colors.grey,
+                          elevation: 8,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(32.0)),
+                          minimumSize: Size(200, 50), //////// HERE
+                        ),
+                        onPressed: () async {
+                          String barcodeScanRes;
+                          barcodeScanRes =
+                              await FlutterBarcodeScanner.scanBarcode(
+                                  "#ff6666", "Cancel", true, ScanMode.QR);
+                          print(barcodeScanRes);
+                          int otp = generateotp(
+                              widget.corider.email, widget.corider.journeyid);
+                          AdminJourneyDatabaseService(
+                                  useremail: widget.user.username,
+                                  journeyid: widget.corider.journeyid)
+                              .updateDriverJourneyDataInUser(
+                                  "true", barcodeScanRes, otp.toString());
+                          AdminJourneyDatabaseService(
+                                  useremail: widget.user.username,
+                                  journeyid: widget.corider.journeyid)
+                              .updateDriverJourneyDistanceDataOtp(
+                                  otp.toString());
+                          setState(() {});
+                        },
+                        child: Text('Pick corider')),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green[400],
+                          foregroundColor: Colors.white,
+                          shadowColor: Colors.grey,
+                          elevation: 8,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(32.0)),
+                          minimumSize: Size(200, 50), //////// HERE
+                        ),
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (Context) {
+                                return AlertDialog(
+                                  title: Text("Enter OTP"),
+                                  content: TextField(
+                                    controller: enteredotp,
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () async {
+                                          int target = -1;
+                                          for (int i = 0;
+                                              i < travellerlist.length;
+                                              i++) {
+                                            if (enteredotp.text ==
+                                                travellerlist[i].otp) {
+                                              target = i;
+                                            }
+                                          }
+                                          await AdminJourneyDatabaseService(
+                                                  useremail:
+                                                      widget.user.username,
+                                                  journeyid:
+                                                      widget.corider.journeyid)
+                                              .updateDriverJourneyDataInUsers(
+                                                  travellerlist[target].email);
+                                        },
+                                        child: Text('submit'))
+                                  ],
+                                );
+                              });
+                          if (enteredotp.text ==
+                              widget.corider.journeyid.substring(9, 15)) {
+                            print("success");
+                          }
+                        },
+                        child: Text('Leave corider')),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green[400],
+                        foregroundColor: Colors.white,
+                        shadowColor: Colors.grey,
+                        elevation: 8,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(32.0)),
+                        minimumSize: Size(200, 50), //////// HERE
+                      ),
+                      onPressed: () async {
+                        for (int i = 0; i < travellerlist.length; i++) {
+                          if (travellerlist[i].isleaved ==
+                                  travellerlist[i].isjoined &&
+                              travellerlist[i].isleaved == 'true') {
+                            await AllJourneyTravellerDatabaseService(
+                                    useremail: travellerlist[i].email)
+                                .updateDriverJEStartData(
+                                    travellerlist[i].journeyid);
+                          }
+                        }
+                        setState(() {
+                          vis = false;
+                        });
+                      },
+                      child: Text('End'),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
