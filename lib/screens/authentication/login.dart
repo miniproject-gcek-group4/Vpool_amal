@@ -70,14 +70,7 @@ class _LoginState extends State<Login> {
         ),
         body: SingleChildScrollView(
           child:
-
-              //////////
               Container(
-            padding: EdgeInsets.only(
-                // left: MediaQuery.of(context).size.height / 70,
-                // right: MediaQuery.of(context).size.height / 70,
-                // top: MediaQuery.of(context).size.height / 100,
-                ),
             child: Form(
               key: _formKey,
               child: Center(

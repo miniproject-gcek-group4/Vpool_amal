@@ -71,16 +71,6 @@ class _RegisterState extends State<Register> {
           'Sign up',
           style: GoogleFonts.poppins(fontSize: 20),
         ),
-        // actions: [
-        //   IconButton(
-        //       onPressed: () {
-        //         widget.toggleView();
-        //       },
-        //       icon: Icon(
-        //         Icons.arrow_back,
-        //         size: 30,
-        //       ))
-        // ],
       ),
       body: SingleChildScrollView(
         //physics: NeverScrollableScrollPhysics(),

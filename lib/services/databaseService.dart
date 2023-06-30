@@ -267,6 +267,12 @@ class AllJourneyTravellerDatabaseService {
         {"isend":"true",});
   }
 
+  Future deleteTravellerJourneyData(String journeyid,driveremail)async{
+    await _usercollection.doc(useremail).collection('journey').doc(journeyid).delete();
+    return await _usercollection.doc(driveremail).collection('journey').doc(journeyid).collection('coriders')
+        .doc(useremail).delete();
+  }
+
 }
 
 class AllJourneyDriverDatabaseService {
@@ -276,6 +282,8 @@ class AllJourneyDriverDatabaseService {
 
   final CollectionReference _usercollection = FirebaseFirestore.instance
       .collection('user');
+  final CollectionReference _journeycollection = FirebaseFirestore.instance
+      .collection('journey');
 
   Stream<List<Travel>> get corider {
     return _usercollection.doc(useremail).collection('journey')
@@ -300,6 +308,19 @@ class AllJourneyDriverDatabaseService {
           elong: _user["endlong"] ?? "",
           journeyid: _user["journeyid"] ?? "");
     }).toList();
+  }
+
+  Future updatetravellerLiftJourneyData(String journeyid,String driveremail)async{
+    await _usercollection.doc(useremail).collection('journey').doc(journeyid).set({"islift":"true",
+    "journeyid":journeyid,"driverid":driveremail});
+    return await _usercollection.doc(driveremail).collection('journey').doc(journeyid)
+        .collection('coriders').doc(useremail).set({
+      "islift":"true","journeyid":journeyid,"driverid":driveremail});
+  }
+
+  Future deleteDriverJourneyData(String journeyid)async{
+    await _journeycollection.doc(journeyid).delete();
+    return await _usercollection.doc(useremail).collection('journey').doc(journeyid).delete();
   }
 }
 

@@ -111,11 +111,8 @@ class _UserHomeState extends State<UserHome> {
   Container buildMyNavBar(BuildContext context) {
     return Container(
       height: 80,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-            colors: <Color>[Colors.cyan, Colors.green]),
+      decoration: BoxDecoration(
+        color: bottomColor,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
@@ -234,7 +231,7 @@ class _QrTravellerState extends State<QrTraveller> {
       appBar: AppBar(
         title: Text(
           "My QR",
-          style: GoogleFonts.poppins(fontSize: 24),
+         style: GoogleFonts.poppins(fontSize: 24),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -259,23 +256,23 @@ class _QrTravellerState extends State<QrTraveller> {
               SizedBox(
                 height: 30,
               ),
-              // ElevatedButton(
-              //     style: ElevatedButton.styleFrom(
-              //       backgroundColor: Colors.green[400],
-              //       foregroundColor: Colors.white,
-              //       shadowColor: Colors.grey,
-              //       elevation: 8,
-              //       shape: RoundedRectangleBorder(
-              //           borderRadius: BorderRadius.circular(32.0)),
-              //       minimumSize: Size(200, 50), //////// HERE
-              //     ),
-              //     onPressed: () {
-              //       Navigator.of(context).pushNamed('qr_scan');
-              //     },
-              //     child: Text(
-              //       "Scan QR",
-              //       style: GoogleFonts.poppins(fontSize: 16),
-              //     ))
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green[400],
+                    foregroundColor: Colors.white,
+                    shadowColor: Colors.grey,
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(32.0)),
+                    minimumSize: Size(200, 50), //////// HERE
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('qr_scan');
+                  },
+                  child: Text(
+                    "Scan QR",
+                    style: GoogleFonts.poppins(fontSize: 16),
+                  ))
             ],
           ),
         )),

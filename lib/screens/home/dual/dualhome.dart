@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:untitled1/main.dart';
-import 'package:untitled1/models/components.dart';
 import 'package:untitled1/screens/home/owner/addjourney.dart';
 import 'package:untitled1/screens/home/owner/ownerbooking.dart';
 import 'package:untitled1/screens/home/owner/ownerhome.dart';
@@ -19,19 +17,19 @@ class DualHome extends StatefulWidget {
   const DualHome({required this.user});
   final NewUser user;
 
+
   @override
   State<DualHome> createState() => _DualHomeState();
 }
 
 class _DualHomeState extends State<DualHome> {
   int pageIndex = 0;
-  Icon icon = Icon(Icons.person);
-  final AuthService _auth = AuthService();
-  int v = 0;
+  Icon icon= Icon(Icons.person);
+  final AuthService _auth =AuthService();
+  int v=0;
   @override
   void initState() {
-    super.initState();
-  }
+    super.initState();}
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +40,6 @@ class _DualHomeState extends State<DualHome> {
       UserNotification(user: widget.user),
       UserBookings(user: widget.user)
     ];
-
     ///pages of dual user as driver
     final ownerpages = [
       DriverHome(),
@@ -50,102 +47,70 @@ class _DualHomeState extends State<DualHome> {
       OwnerPayment(user: widget.user),
       OwnerBooking(user: widget.user)
     ];
-    List list = [userpages, ownerpages];
+    List list=[userpages,ownerpages];
 
     return Scaffold(
+
       appBar: AppBar(
-        flexibleSpace: Appbarstylining(),
-        elevation: 0,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               bottomRight: Radius.circular(25),
               bottomLeft: Radius.circular(25)),
-        ),
-        toolbarHeight: MediaQuery.of(context).size.height / 15,
-        title: Center(
-            child: Text(
-          'Vpool',
-          style: GoogleFonts.poppins(fontSize: 24),
-        )),
-        backgroundColor: Colors.white,
+        ), toolbarHeight: MediaQuery.of(context).size.height/15,
+        title:const  Center(child:
+        Text('V-Pool',style: TextStyle(
+            fontSize: 25,fontWeight:FontWeight.w900),)),
+        backgroundColor: topcolor,
         centerTitle: true,
-        leading: BackButton(
-          onPressed: () {
-            //Navigator.of(context).pushNamed(Login.id);
-          },
-        ),
+        leading: BackButton(onPressed: (){
+          //Navigator.of(context).pushNamed(Login.id);
+        },),
         actions: [
-          PopupMenuButton(itemBuilder: (context) {
-            return [
-              const PopupMenuItem<int>(
-                value: 0,
-                child: Text("My Account"),
-              ),
-              const PopupMenuItem<int>(
-                value: 1,
-                child: Text("My Qr"),
-              ),
-              const PopupMenuItem<int>(
-                value: 2,
-                child: Text("Logout"),
-              ),
-            ];
-          }, onSelected: (value) async {
-            if (value == 0) {
-              print("My account menu is selected.");
-            } else if (value == 1) {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return QrTraveller(
-                  user: widget.user,
-                );
-              }));
-            } else if (value == 2) {
-              await _auth.signOut();
-            }
-          }),
+          PopupMenuButton(
+              itemBuilder: (context){
+                return [
+                  const PopupMenuItem<int>(
+                    value: 0,
+                    child: Text("My Account"),
+                  ),
+                  const PopupMenuItem<int>(
+                    value: 1,
+                    child: Text("My Qr"),
+                  ),
+                  const PopupMenuItem<int>(
+                    value: 2,
+                    child: Text("Logout"),
+                  ),
+                ];
+              },
+              onSelected:(value)async{
+                if(value == 0){
+                  print("My account menu is selected.");
+                }else if(value == 1) {
+                  Navigator.push(context,MaterialPageRoute(builder: (context){
+                    return QrTraveller(user: widget.user,);
+                }));}else if(value == 2){
+                  await _auth.signOut();                }
+              }
+          ),
         ],
       ),
       body: Stack(
         children: [
-          Container(
-              padding: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.height / 50,
-                  right: MediaQuery.of(context).size.height / 50),
-              height: MediaQuery.of(context).size.height,
-              child: list[v][pageIndex]),
-          Positioned(
-              top: MediaQuery.of(context).size.height / 1.25,
-              right: 5,
-              left: 5,
-              child: buildMyNavBar(context)),
-
+          Container(padding: EdgeInsets.only(left: MediaQuery.of(context).size.height/50,right: MediaQuery.of(context).size.height/50),
+              height: MediaQuery.of(context).size.height,child: list[v][pageIndex]),
+          Positioned(top: MediaQuery.of(context).size.height/1.25,
+              right: 5,left:5,child: buildMyNavBar(context)),
           ///following floating action button is responsible fr naviagting btwn traveler and driver
-          Positioned(
-              top: MediaQuery.of(context).size.height / 1.30,
-              left: MediaQuery.of(context).size.width / 2.35,
-              child: FloatingActionButton.extended(
-                onPressed: () {
+          Positioned(top: MediaQuery.of(context).size.height/1.30,left: MediaQuery.of(context).size.width/2.35,
+              child: FloatingActionButton.extended(onPressed: (){
+                print(v);
+                if(v==0){ v=1; icon = Icon(Icons.car_crash_sharp);print("owner");}
+                else {v=0;icon=Icon(Icons.person);print("travller");}
+                setState(() {
                   print(v);
-                  if (v == 0) {
-                    v = 1;
-                    icon = Icon(
-                      Icons.directions_bus_rounded,
-                    );
-                    print("owner");
-                  } else {
-                    v = 0;
-                    icon = Icon(
-                      Icons.person,
-                    );
-                    print("travller");
-                  }
-                  setState(() {
-                    print(v);
-                  });
-                },
-                label: icon,
-                elevation: 5,
-              )),
+                });
+              }, label: icon,elevation: 5,)),
         ],
       ),
     );
@@ -156,10 +121,7 @@ class _DualHomeState extends State<DualHome> {
     return Container(
       height: 80,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-            colors: <Color>[Colors.cyan, Colors.green]),
+        color: bottomColor,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
@@ -168,29 +130,30 @@ class _DualHomeState extends State<DualHome> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Column(children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {
-                setState(() {
-                  pageIndex = 0;
-                });
-              },
-              icon: pageIndex == 0
-                  ? const Icon(
-                      Icons.home_filled,
-                      color: Colors.white,
-                      size: 35,
-                    )
-                  : const Icon(
-                      Icons.home_outlined,
-                      color: Colors.white,
-                      size: 35,
-                    ),
-            ),
-            const Text("Home")
-          ]),
-          Column(children: [
+          Column(
+              children:[
+                IconButton(
+                  enableFeedback: false,
+                  onPressed: () {
+                    setState(() {
+                      pageIndex = 0;
+                    });
+                  },
+                  icon: pageIndex == 0
+                      ? const Icon(
+                    Icons.home_filled,
+                    color: Colors.white,
+                    size: 35,
+                  )
+                      : const Icon(
+                    Icons.home_outlined,
+                    color: Colors.white,
+                    size: 35,
+                  ),
+                ),
+                const Text("Home")
+              ]),
+          Column(children:[
             IconButton(
               enableFeedback: false,
               onPressed: () {
@@ -200,19 +163,17 @@ class _DualHomeState extends State<DualHome> {
               },
               icon: pageIndex == 1
                   ? const Icon(
-                      Icons.search,
-                      color: Colors.white,
-                      size: 35,
-                    )
+                Icons.search,
+                color: Colors.white,
+                size: 35,
+              )
                   : const Icon(
-                      Icons.search_outlined,
-                      color: Colors.white,
-                      size: 35,
-                    ),
-            ),
-            v == 0 ? const Text('Search') : const Text('add')
-          ]),
-          Column(children: [
+                Icons.search_outlined,
+                color: Colors.white,
+                size: 35,
+              ),
+            ),v==0? const Text('Search'): const Text('add')]),
+          Column(children:[
             IconButton(
               enableFeedback: false,
               onPressed: () {
@@ -222,19 +183,17 @@ class _DualHomeState extends State<DualHome> {
               },
               icon: pageIndex == 4
                   ? const Icon(
-                      Icons.filter_none,
-                      color: Colors.transparent,
-                      size: 35,
-                    )
+                Icons.filter_none,
+                color: Colors.transparent,
+                size: 35,
+              )
                   : const Icon(
-                      Icons.filter_none,
-                      color: Colors.transparent,
-                      size: 35,
-                    ),
-            ),
-            const Text('')
-          ]),
-          Column(children: [
+                Icons.filter_none,
+                color: Colors.transparent,
+                size: 35,
+              ),
+            ),const Text('')]),
+          Column(children:[
             IconButton(
               enableFeedback: false,
               onPressed: () {
@@ -244,19 +203,17 @@ class _DualHomeState extends State<DualHome> {
               },
               icon: pageIndex == 2
                   ? const Icon(
-                      Icons.notifications_active,
-                      color: Colors.white,
-                      size: 35,
-                    )
+                Icons.notifications_active,
+                color: Colors.white,
+                size: 35,
+              )
                   : const Icon(
-                      Icons.notifications_active_outlined,
-                      color: Colors.white,
-                      size: 35,
-                    ),
-            ),
-            v == 0 ? const Text('Notification') : const Text('Payment')
-          ]),
-          Column(children: [
+                Icons.notifications_active_outlined,
+                color: Colors.white,
+                size: 35,
+              ),
+            ),v==0? const Text('Notification'): const Text('Payment')]),
+          Column(children:[
             IconButton(
               enableFeedback: false,
               onPressed: () {
@@ -266,20 +223,19 @@ class _DualHomeState extends State<DualHome> {
               },
               icon: pageIndex == 3
                   ? const Icon(
-                      Icons.person_2,
-                      color: Colors.white,
-                      size: 35,
-                    )
+                Icons.person_2,
+                color: Colors.white,
+                size: 35,
+              )
                   : const Icon(
-                      Icons.person_2_outlined,
-                      color: Colors.white,
-                      size: 35,
-                    ),
-            ),
-            const Text('Bookings')
-          ]),
+                Icons.person_2_outlined,
+                color: Colors.white,
+                size: 35,
+              ),
+            ),const Text('Bookings')]),
         ],
       ),
     );
   }
 }
+
